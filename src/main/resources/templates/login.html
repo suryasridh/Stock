@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+           <h1 align="center">Login to Your Account</h1> <br><br>
+       <div style="display: flex;justify-content: center;">
+ 		<h3 style="color:green" th:text="${session.pass}"></h3>
+ 		<h3 style="color:red" th:text="${session.fail}"></h3>
+ 		<span th:text="${@stockServiceImpl.removeMessage()}"></span>
+ 	</div>
+    <form action="/login" method="post" style="display: flex;justify-content: center;">
+         
+        <fieldset >
+            
+        Email: <input type="text" name="mail"><br> <br>
+        Password: <input type="password" name="Password"> <br><br>
+        <button style=" width: 100px;">Login</button>
+    </fieldset>
+    </form>
+</body>
+</html>

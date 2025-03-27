@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body style="background-image:url('https://png.pngtree.com/thumb_back/fh260/background/20201026/pngtree-scene-with-geometrical-forms-the-poster-model-minimal-background-render-image_437743.jpg');background-size:cover;background-repeat:no-repeat; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <form action="/register" method="post" th:object="${user}" >
+        
+        <h1>User Registration</h1> <br><br>
+        <div>
+ 		<h3 style="color:green" th:text="${session.pass}"></h3>
+ 		<h3 style="color:red" th:text="${session.fail}"></h3>
+ 		<span th:text="${@stockServiceImpl.removeMessage()}"></span>
+ 	</div>
+        Name: <input type="text" name="name" th:field="*{name}">
+        <span th:errors="*{name}"></span><br><br>
+        Email: <input type="text" name="mail" th:field="*{mail}">
+        <span th:errors="*{mail}"></span><br><br>
+        DOB: <input type="date" name="DOB" id="" th:field="*{DOB}">
+        <span th:errors="*{DOB}"></span><br><br>
+        Mobile: <input type="text" name="mobile" id="" th:field="*{mobile}">
+        <span th:errors="*{mobile}"></span><br><br>
+        Password: <input type="text" name="password" th:field="*{password}">
+        <span th:errors="*{password}"></span><br><br>
+        Confirm Password: <input type="text" name="confirmpassword" th:field="*{confirmpassword}">
+        <span th:errors="*{confirmpassword}"></span><br><br>
+        <Button style="background-color: green;width: 100px;height: 35px;">Register</Button>
+    
+    </form>
+</body>
+</html>

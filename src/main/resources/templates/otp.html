@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-image: url('https://t4.ftcdn.net/jpg/05/23/69/29/360_F_523692923_hxuZgDZr6uzJx6yVvNjOGfgVnQVXrKad.jpg');background-repeat: no-repeat;background-size: cover;">
+    <h1 align="center">This is OTP Page</h1>
+    <div  style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+ 		<h3 style="color:green" th:text="${session.pass}"></h3>
+ 		<h3 style="color:red" th:text="${session.fail}"></h3>
+ 		<span th:text="${@stockServiceImpl.removeMessage()}"></span>
+ 	</div>
+	<div style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+	<form action="/otp" method="post">
+		<input type="hidden" name="id" th:value="${id}">
+		<input type="text" name="otp" placeholder="Enter Otp" style="width: 300px;height: 25px;"><br><br>
+		<button style="width: 100px;height: 25px;background-color: green;">Submit</button>
+	</form>
+	</div>
+</body>
+</html>
