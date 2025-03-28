@@ -1,5 +1,6 @@
 package org.jsp.stocks.controller;
 
+import org.jsp.stocks.dto.Stock;
 import org.jsp.stocks.dto.User;
 import org.jsp.stocks.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +53,23 @@ public class StockController {
  		return service.verifyOtp(id, otp,session);
  	}
  	@PostMapping("/login")
- 	public String login(@RequestParam String mail, @RequestParam String Password,HttpSession session) {
- 		return service.login(mail, Password,session);
+ 	public String login(@RequestParam String mail, @RequestParam String password,HttpSession session) {
+ 		return service.login(mail, password,session);
  	}
  	@GetMapping("/logout")
  	public String logout(HttpSession session) {
  		return service.logout(session);
+ 	}
+ 	
+ 	
+ 	@GetMapping("/add-stock")
+ 	public String loadAddStock(HttpSession session) {
+ 		return service.addStock(session);
+ 	}
+ 
+ 	@PostMapping("/add-stock")
+ 	public String addStock(HttpSession session,Stock stock) {
+ 		return service.addStock(session,stock);
  	}
 	
 

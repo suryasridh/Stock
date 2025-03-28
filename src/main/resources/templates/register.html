@@ -4,30 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <style>
+        body {
+            background-image: url('https://images.pexels.com/photos/1097930/pexels-photo-1097930.jpeg'); /* Corrected image URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 320px;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+            color: gray;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: darkgreen;
+        }
+        .messages {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
-<body style="background-image:url('https://png.pngtree.com/thumb_back/fh260/background/20201026/pngtree-scene-with-geometrical-forms-the-poster-model-minimal-background-render-image_437743.jpg');background-size:cover;background-repeat:no-repeat; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-    <form action="/register" method="post" th:object="${user}" >
+<body>
+    <form action="/register" method="post" th:object="${user}" onsubmit="return validatePasswords()">
+        <h1>User Registration</h1>
         
-        <h1>User Registration</h1> <br><br>
-        <div>
- 		<h3 style="color:green" th:text="${session.pass}"></h3>
- 		<h3 style="color:red" th:text="${session.fail}"></h3>
- 		<span th:text="${@stockServiceImpl.removeMessage()}"></span>
- 	</div>
-        Name: <input type="text" name="name" th:field="*{name}">
-        <span th:errors="*{name}"></span><br><br>
-        Email: <input type="text" name="mail" th:field="*{mail}">
-        <span th:errors="*{mail}"></span><br><br>
-        DOB: <input type="date" name="DOB" id="" th:field="*{DOB}">
-        <span th:errors="*{DOB}"></span><br><br>
-        Mobile: <input type="text" name="mobile" id="" th:field="*{mobile}">
-        <span th:errors="*{mobile}"></span><br><br>
-        Password: <input type="text" name="password" th:field="*{password}">
-        <span th:errors="*{password}"></span><br><br>
-        Confirm Password: <input type="text" name="confirmpassword" th:field="*{confirmpassword}">
-        <span th:errors="*{confirmpassword}"></span><br><br>
-        <Button style="background-color: green;width: 100px;height: 35px;">Register</Button>
-    
+        <div class="messages">
+            <h3 style="color:green" th:text="${session.pass}"></h3>
+            <h3 style="color:red" th:text="${session.fail}"></h3>
+            <span th:text="${@stockServiceImpl.removeMessage()}"></span>
+        </div>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" th:field="*{name}" placeholder="Enter your name" required>
+        <span class="error" th:errors="*{name}"></span>
+
+        <label for="mail">Email:</label>
+        <input type="email" id="mail" name="mail" th:field="*{mail}" placeholder="Enter your email" required>
+        <span class="error" th:errors="*{mail}"></span>
+
+        <label for="DOB">Date of Birth:</label>
+        <input type="date" id="DOB" name="DOB" th:field="*{DOB}" required>
+        <span class="error" th:errors="*{DOB}"></span>
+
+        <label for="mobile">Mobile:</label>
+        <input type="tel" id="mobile" name="mobile" th:field="*{mobile}" pattern="[0-9]{10}" placeholder="Enter 10-digit mobile number" required>
+        <span class="error" th:errors="*{mobile}"></span>
+
+        <label for="password">Password:</label>
+        <div class="password-container">
+            <input type="password" id="password" name="password" th:field="*{password}" autocomplete="off" required
+                pattern="(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character">
+            <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+        </div>
+        <span class="error" th:errors="*{password}"></span>
+
+        <label for="confirmpassword">Confirm Password:</label>
+        <div class="password-container">
+            <input type="password" id="confirmpassword" name="confirmpassword" th:field="*{confirmpassword}" autocomplete="off" required>
+            <span class="toggle-password" onclick="togglePassword('confirmpassword')">👁️</span>
+        </div>
+        <span class="error" id="passwordError"></span>
+
+        <button type="submit">Register</button>
     </form>
+
+    <script>
+        function togglePassword(fieldId) {
+            let field = document.getElementById(fieldId);
+            field.type = (field.type === "password") ? "text" : "password";
+        }
+
+        function validatePasswords() {
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirmpassword").value;
+            let errorElement = document.getElementById("passwordError");
+
+            if (password !== confirmPassword) {
+                errorElement.textContent = "Passwords do not match!";
+                return false;
+            }
+            errorElement.textContent = "";
+            return true;
+        }
+    </script>
 </body>
 </html>

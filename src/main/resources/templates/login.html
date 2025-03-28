@@ -4,22 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        .messages {
+            margin-bottom: 10px;
+        }
+        fieldset {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: darkgreen;
+        }
+    </style>
 </head>
 <body>
-           <h1 align="center">Login to Your Account</h1> <br><br>
-       <div style="display: flex;justify-content: center;">
- 		<h3 style="color:green" th:text="${session.pass}"></h3>
- 		<h3 style="color:red" th:text="${session.fail}"></h3>
- 		<span th:text="${@stockServiceImpl.removeMessage()}"></span>
- 	</div>
-    <form action="/login" method="post" style="display: flex;justify-content: center;">
-         
-        <fieldset >
-            
-        Email: <input type="text" name="mail"><br> <br>
-        Password: <input type="password" name="Password"> <br><br>
-        <button style=" width: 100px;">Login</button>
-    </fieldset>
-    </form>
+    <div class="container">
+        <h1>Login to Your Account</h1>
+        <div class="messages">
+            <h3 style="color:green" th:text="${session.pass}"></h3>
+            <h3 style="color:red" th:text="${session.fail}"></h3>
+            <span th:text="${@stockServiceImpl.removeMessage()}"></span>
+        </div>
+        <form action="/login" method="post">
+            <fieldset>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="mail" required> <br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" autocomplete="off" required> <br>
+
+                <button type="submit">Login</button>
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>

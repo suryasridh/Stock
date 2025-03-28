@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Random;
 
+import org.jsp.stocks.dto.Stock;
 import org.jsp.stocks.dto.User;
 import org.jsp.stocks.Repository.UserRepository;
 import org.jsp.stocks.service.AES;
@@ -15,6 +16,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -26,11 +28,19 @@ import jakarta.validation.Valid;
 @Service
 public class StockServiceImpl implements StockService {
 	
+	
+	@Autowired
+ 	RestTemplate restTemplate;
+	
 	@Value("${admin.mail}")
  	String adminEmail;
  	
  	@Value("${admin.password}")
  	String adminPassword;
+ 	
+ 	@Value("${stock.api.key}")
+ 	String stockapikey;
+ 
 
 	@Autowired
 	UserRepository userRepository;
@@ -97,7 +107,7 @@ public class StockServiceImpl implements StockService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		try {
-			helper.setFrom("ponnarasansachin97@gmail.com", "StockMarketApp");
+			helper.setFrom("suryasridharlr@gmil.com", "StockMarketApp");
 			helper.setTo(user.getMail());
 			helper.setSubject("OTP for Account Creation");
 			helper.setText("<h1>Hello " + user.getName() + " Your OTP is : " + user.getOtp()+"</h1>",true);
@@ -147,7 +157,10 @@ public class StockServiceImpl implements StockService {
  		User user=(User)session.getAttribute("user");
  		session.removeAttribute("user");
  		session.removeAttribute("admin");
- 		session.setAttribute("pass", "Logout Success, Sad to see you go Bye "+user.getName());
+ 		
+ 		
+ 		if (user != null)
+ 			session.setAttribute("pass", "Logout Success, Sad to see you go Bye " + user.getName());
  		return "redirect:/";
  	}
 	
@@ -161,8 +174,47 @@ public class StockServiceImpl implements StockService {
  	}
 
 
+	public boolean updateStockFromAPI(Stock stock) {
+		return true;
+	
+	}
+	
+	
+	@Override
+ 	public String addStock(HttpSession session) {
+ 		if (session.getAttribute("admin") != null)
+ 			return "add-stock.html";
+ 		else {
+ 			session.setAttribute("fail", "Invalid Session, Login First");
+ 			return "redirect:/login";
+ 		}
+ 	}
+ 
+ 	@Override
+ 	public String addStock(HttpSession session, Stock stock) {
+ 		if (session.getAttribute("admin") != null) {
+ 			boolean flag = updateStockFromAPI(stock);
+ 			if (flag) {
+ 
+ 				session.setAttribute("pass", "Stock Added Success for " + stock.getCompanyName());
+ 				return "redirect:/";
+ 			} else {
+ 				session.setAttribute("fail", "Stock Not Found for " + stock.getCompanyName());
+ 				return "redirect:/";
+ 			}
+ 		} else {
+ 			session.setAttribute("fail", "Invalid Session, Login First");
+ 			return "redirect:/login";
+ 		}
+ 	}
+ 
+ 	public boolean updateStockFromAPI1(Stock stock) {
+ 		return true;
+ 	}
+	
+
+	}
 	
 
 	
 
-}

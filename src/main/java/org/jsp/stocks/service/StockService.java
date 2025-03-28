@@ -1,5 +1,6 @@
 package org.jsp.stocks.service;
 
+import org.jsp.stocks.dto.Stock;
 import org.jsp.stocks.dto.User;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,13 @@ public interface StockService {
 
 	String logout(HttpSession session);
 
+
+
+
+
+	String addStock(HttpSession session);
+	 
+ 	String addStock(HttpSession session, Stock stock);
 
 
 }
